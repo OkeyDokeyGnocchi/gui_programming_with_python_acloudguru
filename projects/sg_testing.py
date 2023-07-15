@@ -18,7 +18,7 @@ rules.append(
     }
 )
 
-sec_group_ingress = []
+sec_group_ingress_rules = []
 
 for rule in rules:
     template = f"""
@@ -27,7 +27,7 @@ for rule in rules:
         ToPort: {rule['ToPort']}
         CidrIp: {rule['CidrIp']}
     """
-    sec_group_ingress.append(template)
+    sec_group_ingress_rules.append(template)
 
 template_header = f"""
 InstanceSecurityGroup:
@@ -38,8 +38,11 @@ InstanceSecurityGroup:
     SecurityGroupIngress:
 """
 
+# Need to get the stuff after the SG template
+template_footer = ""
+
 template = template_header.strip()
-for sg in sec_group_ingress:
+for sg in sec_group_ingress_rules:
     template = template + sg.rstrip()
 
 print(template)
