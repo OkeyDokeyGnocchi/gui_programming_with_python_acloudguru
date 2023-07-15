@@ -1,3 +1,5 @@
+import os
+
 rules = []
 
 rules.append(
@@ -29,11 +31,13 @@ for rule in rules:
     """
     sec_group_ingress_rules.append(template)
 
+service_name = "LicenseServer"
+
 template_header = f"""
 InstanceSecurityGroup:
   Type: AWS::EC2::SecurityGroup
   Properties:
-    GroupDescription: License SG for NAMEHERE
+    GroupDescription: License SG for {service_name}
     VpcId: !Ref ItsVpc
     SecurityGroupIngress:
 """
@@ -46,3 +50,8 @@ for sg in sec_group_ingress_rules:
     template = template + sg.rstrip()
 
 print(template)
+
+dir_name = os.path.dirname(__file__) + "/"
+
+with open(dir_name + service_name + ".template.yaml", "w") as f:
+    f.write(template)
